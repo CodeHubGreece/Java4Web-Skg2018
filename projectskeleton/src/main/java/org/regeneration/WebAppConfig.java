@@ -3,9 +3,11 @@ package org.regeneration;
 import org.regeneration.security.CustomAccessDeniedHandler;
 import org.regeneration.security.MySavedRequestAwareAuthenticationSuccessHandler;
 import org.regeneration.security.RestAuthenticationEntryPoint;
+import org.regeneration.services.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,14 +29,22 @@ public class WebAppConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomAccessDeniedHandler accessDeniedHandler;
 
+    @Autowired
+    private MyUserDetailsService myUserDetailsService;
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(myUserDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
     private SimpleUrlAuthenticationFailureHandler myFailureHandler = new SimpleUrlAuthenticationFailureHandler();
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("admin").password(encoder().encode("admin")).roles("ADMIN")
-                .and()
-                .withUser("user").password(encoder().encode("user")).roles("USER");
+        auth.authenticationProvider(authenticationProvider());
     }
 
     @Override
@@ -60,7 +70,7 @@ public class WebAppConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder encoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
