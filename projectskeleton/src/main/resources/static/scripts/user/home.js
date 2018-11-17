@@ -4,13 +4,17 @@ function logout() {
 }
 
 function populateDataTable(books) {
+    $("#books").append("<tbody>");
     jQuery.each(books, function(i,book) {
         $("#books").append("<tr id='bookRow" + book.id + "'><td>" + book.id + "</td><td>" + book.title + "</td></tr>");
      });
+     $("#books").append("</tbody>");
 
      $("#books tr").click(function() {
         loadBook($(this).children("td").html());
      });
+
+    $('#books').DataTable();
 }
 
 function loadBook(id) {
@@ -24,6 +28,7 @@ function loadBook(id) {
 };
 
 $(document).ready(function() {
+
     $.ajax({
         url: ROOT_PATH + "/books"
     }).then(function(books) {
