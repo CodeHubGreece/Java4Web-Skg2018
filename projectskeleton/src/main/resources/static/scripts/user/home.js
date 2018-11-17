@@ -4,9 +4,12 @@ function logout() {
 }
 
 function populateDataTable(books) {
+    
+    $("#books").append("<tbody>");
     jQuery.each(books, function(i,book) {
         $("#books").append("<tr id='bookRow" + book.id + "'><td>" + book.id + "</td><td>" + book.title + "</td></tr>");
      });
+     $("#books").append("</tbody>");
 
      $("#books tr").click(function() {
         loadBook($(this).children("td").html());
@@ -15,7 +18,7 @@ function populateDataTable(books) {
 
 function loadBook(id) {
     $.ajax({
-        url: ROOT_PATH + "/books/" + id
+        url: API_ROOT + "/books/" + id
     }).then(function(book) {
        $("input[name=id]").val(book.id);
        $("input[name=title]").val(book.title);
@@ -25,7 +28,7 @@ function loadBook(id) {
 
 $(document).ready(function() {
     $.ajax({
-        url: ROOT_PATH + "/books"
+        url: API_ROOT + "/books"
     }).then(function(books) {
         populateDataTable(books);
     });
@@ -39,7 +42,7 @@ $(document).ready(function() {
         event.preventDefault();
         let bookId = $("input[name=id]").val();
         $.ajax({
-            url: ROOT_PATH + "/books/" + bookId,
+            url: API_ROOT + "/books/" + bookId,
             type : "DELETE",
             dataType : 'json',
             contentType: 'application/json',

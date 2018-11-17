@@ -8,7 +8,7 @@ function login(usernameElement, passwordElement) {
     fd.append( 'password', password);
 
     $.ajax({
-      url: ROOT_PATH + '/login',
+      url: API_ROOT + '/login',
       data: fd,
       processData: false,
       contentType: false,
