@@ -46,7 +46,7 @@ public class BookController {
                 .orElseThrow(() -> new BookNotFoundException(id));
     }
 
-    @DeleteMapping("books/{id}")
+    @DeleteMapping("/books/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteBook(@PathVariable Long id) {
         getBook(id);

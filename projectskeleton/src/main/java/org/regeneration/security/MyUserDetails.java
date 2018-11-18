@@ -7,17 +7,25 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MyUserDetails implements UserDetails {
+
     private final User user;
+
+    private final Map<String, UserRole> userRolesMap;
 
     public MyUserDetails(User user) {
         this.user = user;
+        this.userRolesMap = createPrivilegedUsersRoles(user);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("User"));
+        String userRole = userRolesMap.getOrDefault(user.getUsername(), UserRole.USER).name();
+        return Collections.singletonList(
+                new SimpleGrantedAuthority("ROLE_" + userRole));
     }
 
     @Override
@@ -49,4 +57,12 @@ public class MyUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    private Map<String, UserRole> createPrivilegedUsersRoles(User user) {
+        HashMap<String, UserRole> map = new HashMap<>();
+        map.put("admin", UserRole.ADMIN);
+        map.put("moderator", UserRole.MODERATOR);
+        return map;
+    }
+
 }

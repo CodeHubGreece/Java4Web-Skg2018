@@ -1,12 +1,10 @@
 package org.regeneration.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class User {
@@ -14,6 +12,7 @@ public class User {
     private Long id;
     private String username;
     private String password;
+    private String role;
 
     public User() {}
     public User(String username, String password) {
@@ -36,11 +35,18 @@ public class User {
         this.username = username;
     }
 
-    @JsonIgnore
+    @JsonIgnore()
     public String getPassword() { return password; }
     @JsonProperty
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Transient
+    public String getRole() { return role; }
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override
@@ -50,4 +56,6 @@ public class User {
                 ", username='" + username + '\'' +
                 '}';
     }
+
+
 }

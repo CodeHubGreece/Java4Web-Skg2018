@@ -26,8 +26,13 @@ public class LoadDatabase {
             logger.info("Preloading " + bookRepository.save(new Book("Pride and Prejudice", "0486284735")));
             logger.info("Preloading " + bookRepository.save(new Book("The Great Gatsby", "9780141182636")));
 
-            User userGuest = new User("user", passwordEncoder.encode("userPassword"));
-            logger.info("Preloading " + userRepository.save(userGuest));
+            User user = new User("user", passwordEncoder.encode("userPassword"));
+            User moderator = new User("moderator", passwordEncoder.encode("moderatorPassword"));
+            User admin = new User("admin", passwordEncoder.encode("adminPassword"));
+
+            logger.info("Preloading " + userRepository.save(user));
+            logger.info("Preloading " + userRepository.save(moderator));
+            logger.info("Preloading " + userRepository.save(admin));
 
         };
     }
