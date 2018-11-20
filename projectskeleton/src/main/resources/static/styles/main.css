@@ -22,12 +22,29 @@ input[type="button"] {
   margin-bottom: 8px;
 }
 
-.invalid-data {
+.error-label {
+  display: none;
+  margin-top: 4px;
+  color: red;
+}
+
+.field .invalid-data {
   border: 1px solid red !important;
   outline: initial !important;
 }
 
-.valid-data {
+.field :invalid  {
+  border: 1px solid red;
+  outline: initial;
+}
+
+.field .valid-data {
   border: 1px solid green !important;
   outline: initial !important;
 }
+
+.field :valid  {
+  border: 1px solid green;
+  outline: initial;
+}
+

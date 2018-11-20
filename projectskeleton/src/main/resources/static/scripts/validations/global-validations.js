@@ -1,7 +1,50 @@
 $(document).ready(function () {
-    $("form [data-validation][data-validation!='submit']").on("keyup change focus", function () {
+
+    /**
+     * Native form validations
+     */
+    $("form:not([data-enable-validation]) input").on("keyup change focus", function () {
         try {
-            console.log(this);
+            const closestForm = $(this).closest("form");
+            if (!closestForm.length) {
+                console.warn("Submit button is undefined.");
+                return;
+            }
+            
+            // Enable / Disable submit button
+            const submitButton = $(closestForm).find("[type='button'],button");
+            if (!submitButton.length) {
+                console.warn("Submit button is undefined.");
+                return;
+            }
+            
+            const isFormValid = $(closestForm)[0].checkValidity();
+    
+            submitButton.attr("disabled", !isFormValid);
+
+            // Show / Hide error label
+            const errorLabel = $(this).closest(".field").find(".error-label");
+            if (!errorLabel.length) {
+                console.warn("Error label is undefined.");
+                return;
+            }
+
+            const isCurrentTargetValid = $(this).is(":valid");
+            if (!isCurrentTargetValid) {
+                $(errorLabel).show();
+            } else {
+                $(errorLabel).hide();
+            }
+        }catch(e) {
+            console.error(e);
+        }
+    });
+
+    /**
+     * Custom validations
+     */
+    $("form[data-enable-validation] input[data-validation][data-validation!='submit']").on("keyup change focus", function () {
+        try {
             const value = $(this).val() || "";
             const validation_type = $(this).attr("data-validation");
 
@@ -9,13 +52,11 @@ $(document).ready(function () {
                 case "no_numbers":
                     validate(this, value, /^[^0-9]+$/);
                     break;
-                case "required":
-                    validate(this, value, /^.+$/);
-                    break;
                 default:
                     console.warn("Wrong validation name.", validation_type);
                     break;
             }
+
         } catch (e) {
             console.error(e);
         }
@@ -56,19 +97,18 @@ $(document).ready(function () {
 
         const closestForm = $(element).closest("form");
         if (!closestForm.length) {
-            console.warn("Submit button not exists.");
+            console.warn("Submit button is undefined.");
             return;
         }
 
         const submitButton = $(closestForm).find("[data-validation='submit']");
         if (!submitButton.length) {
-            console.warn("Submit button not exists.");
+            console.warn("Submit button is undefined.");
             return;
         }
         
         const allElements = $(closestForm).find("[data-validation][data-validation!='submit']").length;
         const validElements = $(closestForm).find(".valid-data").length;
-        console.log(allElements, validElements);
 
         submitButton.attr("disabled", allElements !== validElements);
     }

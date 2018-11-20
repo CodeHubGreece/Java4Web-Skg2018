@@ -31,11 +31,32 @@
     <form>
       <div class="field">
         <label for="username">Username</label>
+        <input type="text" name="username1" value="" placeholder="Type your username" minlength="5" maxLength="20" required>
+        <div class="error-label">Invalid username (5-20).</div>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" name="password1" value="" placeholder="Type your password" minlength="8" maxLength="20" required>
+        <div class="error-label">Invalid password (8-20).</div>
+      </div>
+      <input type="button" value="Login" onclick="login(username1,password1);" disabled="disabled">
+      <a href="./pages/guest/register.html">Register</a>
+    </form>
+  </section>
+  <br><br><br>
+
+  <!-- Login form -->
+  <section class="center">
+    <form data-enable-validation="true">
+      <div class="field">
+        <label for="username">Username</label>
         <input type="text" name="username" value="" placeholder="Type your username" data-validation="no_numbers">
+        <div class="error-label">Invalid username (No numbers).</div>
       </div>
       <div class="field">
         <label for="password">Password</label>
         <input type="password" name="password" value="" placeholder="Type your password" data-validation="no_numbers">
+        <div class="error-label">Invalid password (No numbers).</div>
       </div>
       <input type="button" value="Login" onclick="login(username,password);" data-validation="submit">
       <a href="./pages/guest/register.html">Register</a>
