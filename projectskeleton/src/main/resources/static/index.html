@@ -16,6 +16,7 @@
   <script src="scripts/config/main.js"></script>
   <script src="scripts/security/guest-auth.js"></script>
   <script src="scripts/guest/authentication.js"></script>
+  <script src="scripts/validations/global-validations.js"></script>
 </head>
 
 <body>
@@ -30,13 +31,13 @@
     <form>
       <div class="field">
         <label for="username">Username</label>
-        <input type="text" name="username" value="" placeholder="Type your username">
+        <input type="text" name="username" value="" placeholder="Type your username" data-validation="no_numbers">
       </div>
       <div class="field">
         <label for="password">Password</label>
-        <input type="password" name="password" value="" placeholder="Type your password">
+        <input type="password" name="password" value="" placeholder="Type your password" data-validation="no_numbers">
       </div>
-      <input type="button" value="Login" onclick="login(username,password);">
+      <input type="button" value="Login" onclick="login(username,password);" data-validation="submit">
       <a href="./pages/guest/register.html">Register</a>
     </form>
   </section>
