@@ -32,6 +32,7 @@ public class BookControllerIT {
 
     @Before
     public void setup() {
+        deleteBook();
     }
 
     @Test
@@ -39,7 +40,7 @@ public class BookControllerIT {
         ResponseEntity<String> response =
                 restTemplate.getForEntity(createURLWithPort("/books"), String.class);
 
-        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         String expected = "[" +
                 "{ 'id' : 1, 'title' : 'The Grapes of Wrath', 'isbn' : '0143125508' }," +
@@ -59,26 +60,30 @@ public class BookControllerIT {
 
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(books.size()).isEqualTo(4);
+
+        Book thirdBook = books.get(2);
+        assertThat(thirdBook.getTitle()).isEqualTo("Pride and Prejudice");
+        assertThat(thirdBook.getIsbn()).isEqualTo("0486284735");
     }
 
     @Test
-    @Ignore("TODO")
     public void testGetBookById() {
         Long bookId = 3l;
-        ResponseEntity<Book> response = null;
+        ResponseEntity<Book> response =
+                restTemplate.getForEntity(createURLWithPort("/books/{id}"), Book.class, bookId);
 
-        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getTitle()).isEqualTo("Pride and Prejudice");
     }
 
     @Test
-    @Ignore("TODO")
     public void testAddNewBook() {
         Book newBook = new Book();
         newBook.setTitle("The Lord of the Rings");
         newBook.setIsbn("9780544003415");
 
-        ResponseEntity<Book> response = null;
+        ResponseEntity<Book> response =
+                restTemplate.postForEntity(createURLWithPort("/books"), newBook, Book.class);
 
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(response.getBody().getTitle()).isEqualTo("The Lord of the Rings");

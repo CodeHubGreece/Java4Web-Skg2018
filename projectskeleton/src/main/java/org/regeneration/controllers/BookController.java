@@ -5,7 +5,6 @@ import org.regeneration.models.Book;
 import org.regeneration.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,7 +46,7 @@ public class BookController {
                 .orElseThrow(() -> new BookNotFoundException(id));
     }
 
-    @DeleteMapping("books/{id}")
+    @DeleteMapping("/books/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteBook(@PathVariable Long id) {
         getBook(id);
