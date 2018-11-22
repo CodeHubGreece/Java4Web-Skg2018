@@ -4,17 +4,9 @@ import java.util.Date;
 
 public class ErrorDetails {
 
-    private Date timestamp;
     private String error;
     private String details;
-
-    public Date getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
-    }
+    private Date timestamp;
 
     public String getError() {
         return error;
@@ -32,9 +24,17 @@ public class ErrorDetails {
         this.details = details;
     }
 
-    public ErrorDetails(Date timestamp, String error, String details) {
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public ErrorDetails(String error, String details) {
         this.error = error;
         this.details = details;
+        this.timestamp = new Date();
     }
 }
