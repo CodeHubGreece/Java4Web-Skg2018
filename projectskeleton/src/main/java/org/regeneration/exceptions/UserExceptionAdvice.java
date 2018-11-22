@@ -1,26 +1,21 @@
 package org.regeneration.exceptions;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class UserExceptionAdvice {
 
-    @ResponseBody
     @ExceptionHandler(NoLoggedInUserException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    String noLoggedInUserHandler(NoLoggedInUserException e) {
-        return e.getMessage();
+    ErrorDetails noLoggedInUserHandler(NoLoggedInUserException e) {
+        return new ErrorDetails(e.getMessage(), e.getMessage());
     }
 
-    @ResponseBody
     @ExceptionHandler(UserNotFoundException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    String notFoundHandler(UserNotFoundException e) {
-        return e.getMessage();
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    ErrorDetails notFoundHandler(UserNotFoundException e) {
+       return new ErrorDetails("User not found", e.getMessage());
     }
 
 }

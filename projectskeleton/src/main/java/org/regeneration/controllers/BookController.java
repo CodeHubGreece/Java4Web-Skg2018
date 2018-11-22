@@ -5,11 +5,15 @@ import org.regeneration.models.Book;
 import org.regeneration.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @RestController
+@Validated
 public class BookController {
 
     private final BookRepository bookRepository;
@@ -20,8 +24,12 @@ public class BookController {
     }
 
     @GetMapping("/books")
-    public List<Book> getBooks() {
-        return bookRepository.findAll();
+    public List<Book> getBooks(@RequestParam(value = "title", required = false) @Size(min = 3) String title) {
+        if (title == null) {
+            return bookRepository.findAll();
+        } else {
+            return bookRepository.findByTitleContaining(title);
+        }
     }
 
     @GetMapping("/books/{id}")
@@ -31,7 +39,7 @@ public class BookController {
     }
 
     @PostMapping("/books")
-    public Book newBook(@RequestBody Book book) {
+    public Book newBook(@RequestBody @Valid Book book) {
         return bookRepository.save(book);
     }
 
